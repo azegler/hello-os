@@ -1,7 +1,22 @@
-FROM node:18.20.2-windowsservercore-ltsc2022
+# Dockerfile.windows
+FROM mcr.microsoft.com/windows/servercore:ltsc2022
+
+# wszystkie RUN będą wykonywane przez PowerShell
+SHELL ["powershell", "-Command"]
+
+# pobierz, rozpakuj i usuń archiwum w jednej linijce
+RUN Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.20.2/node-v18.20.2-win-x64.zip" -OutFile C:\node.zip; \
+    Expand-Archive -Path C:\node.zip -DestinationPath C:\nodejs; \
+    Remove-Item C:\node.zip
+
+# dodaj Node.js do PATH
+ENV PATH="C:\\nodejs\\node-v18.20.2-win-x64;${env:PATH}"
 
 WORKDIR C:/app
+
 COPY package*.json ./
 RUN npm install --production
+
 COPY index.js ./
-ENTRYPOINT ["node","index.js"]
+
+ENTRYPOINT ["node", "index.js"]

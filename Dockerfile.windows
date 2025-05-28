@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/node:lts-nanoserver-ltsc2022
+FROM node:18-nanoserver-ltsc2022
 
 WORKDIR C:/app
 COPY package*.json ./

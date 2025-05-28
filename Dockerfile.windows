@@ -1,20 +1,23 @@
-# Dockerfile.windows
+# Dockerfile.windows (bez backticków)
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
 
-# użyj PowerShell do pobrania i rozpakowania Node.js
-SHELL ["powershell", "-Command"]
+# Użyj PowerShell do wykonywania RUN
+SHELL ["powershell", "-NoProfile", "-Command"]
 
-# 1) pobierz i rozpakuj Node.js 18.20.2
-RUN Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.20.2/node-v18.20.2-win-x64.zip" -OutFile C:\node.zip; Expand-Archive -Path C:\node.zip -DestinationPath C:\; Rename-Item -Path C:\node-v18.20.2-win-x64 -NewName C:\node; Remove-Item C:\node.zip
+# 1) Pobierz i rozpakuj Node.js
+RUN Invoke-WebRequest -Uri 'https://nodejs.org/dist/v18.20.2/node-v18.20.2-win-x64.zip' -OutFile 'C:\node.zip'; \
+    Expand-Archive -Path 'C:\node.zip' -DestinationPath 'C:\node'; \
+    Remove-Item 'C:\node.zip'
 
-# 2) dodaj Node i npm do PATH
-ENV PATH="C:\\node;C:\\node\\node_modules\\npm\\bin;${PATH}"
+# 2) Dodaj Node i npm do PATH
+ENV PATH="C:\node;C:\node\node_modules\npm\bin;%PATH%"
 
-# 3) build aplikacji
-WORKDIR C:/app
+WORKDIR C:\app
+
+# 3) Zainstaluj zależności
 COPY package*.json ./
-# teraz "npm" i "node" są w PATH
 RUN npm install --production
-COPY index.js ./
 
-ENTRYPOINT ["node","index.js"]
+# 4) Skopiuj kod i uruchom
+COPY index.js ./
+ENTRYPOINT ["node", "index.js"]

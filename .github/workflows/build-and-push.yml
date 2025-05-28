@@ -30,7 +30,7 @@ jobs:
             --push .
 
   # 2) Windows: amd64
-  build-windows:
+    build-windows:
     runs-on: windows-latest
     needs: build-linux
     steps:
@@ -43,10 +43,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build & Push Windows image
-        run: |
-          docker build -f Dockerfile.windows \
-            -t azegler/hello-os:windows-latest .
-          docker push azegler/hello-os:windows-latest
+        run: docker build -f Dockerfile.windows -t azegler/hello-os:windows-latest . && docker push azegler/hello-os:windows-latest
+
 
   # 3) Manifest latest
   create-manifest:

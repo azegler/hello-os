@@ -1,5 +1,5 @@
-FROM mcr.microsoft.com/windows/servercore:ltsc2022
-SHELL ["powershell","-Command"]
+FROM mcr.microsoft.com/node:lts-nanoserver-ltsc2022
+
 WORKDIR C:/app
 COPY package*.json ./
 RUN npm install --production

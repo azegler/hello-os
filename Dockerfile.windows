@@ -6,7 +6,7 @@ RUN Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.20.2/node-v18.20.2-win-x
     Expand-Archive -Path C:\node.zip -DestinationPath C:\nodejs; \
     Remove-Item C:\node.zip
 
-ENV PATH C:/nodejs/node-v18.20.2-win-x64;${env:PATH}
+ENV PATH C:/nodejs/node-v18.20.2-win-x64;${PATH}
 
 WORKDIR C:/app
 COPY package*.json ./

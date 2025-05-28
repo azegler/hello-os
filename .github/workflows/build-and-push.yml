@@ -60,7 +60,6 @@ jobs:
             -t azegler/hello-os:windows-latest .
           docker push azegler/hello-os:windows-latest
 
-  # 3) Create & push multi-arch manifest under :latest
   create-manifest:
     runs-on: ubuntu-latest
     needs:

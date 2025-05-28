@@ -64,9 +64,16 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Create & Push manifest
+      - name: Create manifest for Linux only
         run: |
           docker manifest create azegler/hello-os:latest \
-            azegler/hello-os:linux-latest \
+            azegler/hello-os:linux-latest
+
+      - name: Amend manifest with Windows image
+        run: |
+          docker manifest create --amend azegler/hello-os:latest \
             azegler/hello-os:windows-latest
+
+      - name: Push the combined manifest
+        run: |
           docker manifest push azegler/hello-os:latest

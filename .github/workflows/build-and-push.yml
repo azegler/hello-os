@@ -77,7 +77,7 @@ jobs:
 
       - name: Create & Push combined manifest
         run: |
-          docker manifest create azegler/hello-os:latest \
-            azegler/hello-os:linux-latest \
-            azegler/hello-os:windows-latest
-          docker manifest push azegler/hello-os:latest
+          docker buildx imagetools create \
+          --tag azegler/hello-os:latest \
+          azegler/hello-os:linux-latest \
+          azegler/hello-os:windows-latest

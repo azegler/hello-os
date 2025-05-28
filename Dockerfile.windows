@@ -1,24 +1,14 @@
 # Dockerfile.windows
 FROM mcr.microsoft.com/windows/servercore:ltsc2022
-
-# wszystkie RUN przez PowerShell
 SHELL ["powershell", "-NoProfile", "-Command"]
 
-# 1) Pobierz, rozpakuj i przejrzyj strukturę
 RUN Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.20.2/node-v18.20.2-win-x64.zip" -OutFile "C:\\node.zip"; \
     Expand-Archive -Path "C:\\node.zip" -DestinationPath "C:\\"; \
     Remove-Item "C:\\node.zip"; \
     Rename-Item -Path "C:\\node-v18.20.2-win-x64" -NewName "node"
 
-# 2) Upewnij się, że node.exe jest na C:\node\node.exe
-#    (testując w lokalnym Windows, np. `docker run -it ... powershell -Command Get-ChildItem C:\node`)
-
 WORKDIR C:/app
-
-# 3) Kopiuj pliki i instaluj zależności przez bezpośrednie wywołanie node.exe
 COPY package*.json ./
-RUN C:/node/node.exe C:/node/node_modules/npm/bin/npm-cli.js install --production
-
+RUN C:/node/node.exe C:/node/node_modules/npm/bin/npm-cli.js install --omit=dev
 COPY index.js ./
-
 ENTRYPOINT ["C:\\node\\node.exe","index.js"]

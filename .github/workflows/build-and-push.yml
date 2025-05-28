@@ -42,10 +42,7 @@ jobs:
 
       - name: Build & Push Windows image
         run: |
-          docker build \
-            -f Dockerfile.windows \
-            -t azegler/hello-os:windows-latest \
-            .
+          docker build -f Dockerfile.windows -t azegler/hello-os:windows-latest .
           docker push azegler/hello-os:windows-latest
 
   create-manifest:

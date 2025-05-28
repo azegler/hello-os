@@ -5,13 +5,15 @@ SHELL ["powershell","-NoProfile","-Command"]
 # Pobierz i rozpakuj Node.js 18.20.2 w jednej linii
 RUN Invoke-WebRequest -Uri "https://nodejs.org/dist/v18.20.2/node-v18.20.2-win-x64.zip" -OutFile "C:\\node.zip"; Expand-Archive -Path "C:\\node.zip" -DestinationPath "C:\\node"; Remove-Item "C:\\node.zip"
 
-WORKDIR C:\\app
+# 2) Ustaw katalog roboczy
+WORKDIR C:/app
 
+# 3) Kopiuj package.json i zainstaluj zależności
 COPY package*.json ./
+RUN & "C:\\node\\node.exe" "C:\\node\\node_modules\\npm\\bin\\npm-cli.js" install --production
 
-# Zainstaluj zależności przez node + npm-cli.js
-RUN C:\\node\\node.exe C:\\node\\node_modules\\npm\\bin\\npm-cli.js install --production
-
+# 4) Kopiuj resztę kodu
 COPY index.js ./
 
+# 5) Uruchom aplikację
 ENTRYPOINT ["C:\\node\\node.exe","index.js"]
